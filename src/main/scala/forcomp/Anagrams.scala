@@ -118,12 +118,9 @@ object Anagrams {
   def subtract(x: Occurrences, y: Occurrences): Occurrences = x map {case (c, f) => (c, f - frequencyOf(c, y))} filter
     {case (c, f) => f > 0}
 
-  def frequencyOf(c: Char, os: Occurrences): Int = {
-    val i = os.indexWhere({case (c_os, f) => c_os == c})
-    if(i >= 0)
-      os(i)._2
-    else
-      0
+  def frequencyOf(c: Char, os: Occurrences): Int = os find {case (c_os, f) => c_os == c} match {
+    case Some((c, f)) => f
+    case None => 0
   }
 
   /** Returns a list of all anagram sentences of the given sentence.
