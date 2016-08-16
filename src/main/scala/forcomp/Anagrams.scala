@@ -83,7 +83,27 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
+  def combinations(occurrences: Occurrences): List[Occurrences] =
+  if (occurrences.isEmpty)
+    List(List())
+  else
+    (for {
+      i <- 0 until occurrences.length
+    } yield combinationsHelper(occurrences take i)).flatten.toList
+
+  def combinationsHelper(occurrences: Occurrences): List[Occurrences] =
+    if (occurrences.isEmpty)
+      List(List())
+    else
+      (for {
+        i <- 0 until occurrences.length
+        j <- 0 to occurrences(i)._2
+      } yield combinationsHelper((occurrences take i) ::: (occurrences drop i+1)) map (x => ((occurrences(i)._1, j))
+        :: x)).flatten.toList
+
+
+
+  //(occurrences take n) ::: (occurrences drop n+1)
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    *
@@ -95,7 +115,16 @@ object Anagrams {
    *  Note: the resulting value is an occurrence - meaning it is sorted
    *  and has no zero-entries.
    */
-  def subtract(x: Occurrences, y: Occurrences): Occurrences = ???
+  def subtract(x: Occurrences, y: Occurrences): Occurrences = x map {case (c, f) => (c, f - frequencyOf(c, y))} filter
+    {case (c, f) => f > 0}
+
+  def frequencyOf(c: Char, os: Occurrences): Int = {
+    val i = os.indexWhere({case (c_os, f) => c_os == c})
+    if(i >= 0)
+      os(i)._2
+    else
+      0
+  }
 
   /** Returns a list of all anagram sentences of the given sentence.
    *
