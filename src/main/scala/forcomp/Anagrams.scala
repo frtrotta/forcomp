@@ -151,5 +151,37 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    def sentenceAnagramsHelper(sentenceOccurrences: Occurrences, dictionary: Map[Occurrences, List[Word]]): List[Sentence] = {
+      if (sentenceOccurrences.isEmpty)
+        List(List())
+      else {
+        val cd = compatibleDictionary(dictionary, sentenceOccurrences)
+        (for {
+          (oo, ws) <- cd
+          w <- ws
+        } yield sentenceAnagramsHelper(subtract(sentenceOccurrences, oo), cd) map (w :: _)).flatten.toList
+      }
+    }
+
+    sentenceAnagramsHelper(sentenceOccurrences(sentence), dictionaryByOccurrences)
+  }
+
+
+  def compatibleDictionary(d: Map[Occurrences, List[Word]], os: Occurrences): Map[Occurrences, List[Word]] = {
+    def occurrencesAreIncluded(a: (Occurrences, List[Word])): Boolean = {
+      def occurrenceIsIncluded(tuple: (Char, Int)): Boolean =
+        os.find({case (c, f) => c == tuple._1}) match {
+          case Some((bc, bf)) => bf >= tuple._2
+          case None => false
+        }
+      a._1 forall occurrenceIsIncluded
+    }
+    d.filter(occurrencesAreIncluded)
+  }
+
+
+
+
+
 }
