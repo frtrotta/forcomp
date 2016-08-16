@@ -87,23 +87,11 @@ object Anagrams {
   if (occurrences.isEmpty)
     List(List())
   else
-    (for {
+    List() :: (for {
       i <- 0 until occurrences.length
-    } yield combinationsHelper(occurrences take i)).flatten.toList
-
-  def combinationsHelper(occurrences: Occurrences): List[Occurrences] =
-    if (occurrences.isEmpty)
-      List(List())
-    else
-      (for {
-        i <- 0 until occurrences.length
-        j <- 0 to occurrences(i)._2
-      } yield combinationsHelper((occurrences take i) ::: (occurrences drop i+1)) map (x => ((occurrences(i)._1, j))
-        :: x)).flatten.toList
-
-
-
-  //(occurrences take n) ::: (occurrences drop n+1)
+      j <- 1 to occurrences(i)._2
+    } yield combinations(occurrences drop i+1) map (x => ((occurrences(i)._1, j))
+      :: x)).flatten.toList
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    *

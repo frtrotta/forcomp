@@ -1,4 +1,4 @@
-import forcomp.Anagrams.Occurrences
+import forcomp.Anagrams._
 import forcomp._
 
 def a = List(1, 2, 3, 4)
@@ -16,4 +16,9 @@ for {
   i <- 0 to 7
   j <- 0 to i
 } yield (i, j)
+
+val lard = List(('a', 2), ('d', 1), ('l', 1), ('r', 1))
+combinations(lard) mkString "\n"
+
+
 

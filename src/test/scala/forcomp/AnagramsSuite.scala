@@ -46,7 +46,6 @@ class AnagramsSuite extends FunSuite  {
     assert(subtract(lard, r) === lad)
   }
 
-
   test("combinations: []") {
     assert(combinations(Nil) === List(Nil))
   }
